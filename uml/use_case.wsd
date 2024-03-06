@@ -2,4 +2,21 @@
 
 left to right direction
 
+:user:
+:administrator:
+package system{
+    (authenticate)
+    (place orders)
+    (track orders)
+    (change order status)
+    (update products catalog)
+}
+:user: ..> (authenticate) : User Info
+:user: --> (place orders)
+:user: --> (track orders)
+
+:administrator: --> (change order status)
+:administrator: --> (update products catalog)
+
+
 @enduml
