@@ -2,4 +2,28 @@
 
 left to right direction
 
+class User{
+
+}
+
+class Customer_User{
+
+}
+
+class Product{
+
+}
+
+class Order{
+
+}
+
+class Item{
+    
+}
+
+class Administrator{
+
+}
+
 @enduml
