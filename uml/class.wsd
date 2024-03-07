@@ -3,10 +3,10 @@
 left to right direction
 
 class User{
-    id: Int
-    name: String
-    password: String
-    creation_date: String
+    -id: Int
+    -name: String
+    -password: String
+    -creation_date: String
 }
 
 class Customer_User{
@@ -41,7 +41,7 @@ class Administrator{
 
 User --|> Customer_User
 User --|> Administrator 
-Customer_User -- Order
+Customer_User "1"--"many" Order
 Product -- Item
 Order . Product 
 @enduml
