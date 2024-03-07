@@ -3,7 +3,10 @@
 left to right direction
 
 class User{
-    -authenticate: String 
+    id: Int
+    name: String
+    password: String
+    creation_date: String
 }
 
 class Customer_User{
@@ -12,15 +15,23 @@ class Customer_User{
 }
 
 class Product{
-
+    -code: Int
+    -description: String
+    -availability: Boolean
+    -price: Int
 }
 
 class Order{
-
+    -number: Int
+    -creation_date: String
+    -items: String
+    -status: String
 }
 
 class Item{
-
+    -sequential_number: Int
+    -quantity: Int
+    -paid_price: Double 
 }
 
 class Administrator{
@@ -28,7 +39,8 @@ class Administrator{
     +update_products_catalog
 }
 
-User *--> Customer_User
+User --|> Customer_User
+User --|> Administrator 
 Customer_User -- Order
 Product -- Item
 Order . Product 
