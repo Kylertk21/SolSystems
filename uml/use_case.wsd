@@ -1,7 +1,8 @@
-@startuml 
+@startuml Use_Case
 
 left to right direction
 
+:customer_user:
 :user:
 :administrator:
 package system{
@@ -10,13 +11,20 @@ package system{
     (track orders)
     (change order status)
     (update products catalog)
+    (order status)
 }
 :user: ..> (authenticate) : User Info
-:user: --> (place orders)
-:user: --> (track orders)
+:customer_user: --|> :user:
+:customer_user: --> (place orders)
+:customer_user: --> (track orders)
 
 :administrator: --> (change order status)
 :administrator: --> (update products catalog)
+:administrator: --|> :user:
+(change order status) ..> (order status) : updates
+(place orders) ..> (order status) : updates
+(track orders) ..> (order status) : views
+
 
 
 @enduml
