@@ -1,4 +1,4 @@
-@startuml design
+@startuml Use_Case
 
 left to right direction
 
@@ -7,17 +7,17 @@ left to right direction
 :user: <|-- :customer_user:
 :administrator:
 :user: <|-- :administrator:
-
 package sol_system {
     :user: --> (authenticate)
     :customer_user: --> (place orders)
     :customer_user: --> (track orders)
+
     :administrator: --> (change order status)
     :administrator: --> (update products catalog)
-    (change order status) .. (order status) : updates
-    (place orders) .. (order status) : updates
-    (track orders) .. (order status) : views
-    (update products catalog) .. (products) : updates
+    (change order status) .. (update order status) : extends
+    (place orders) .. (update order status) : extends
+    (authenticate) .. (sign-up) : extends
+    (authenticate) .. (log-in) : extends
 }
 
 @enduml

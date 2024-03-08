@@ -3,7 +3,7 @@
 left to right direction
 
 class User{
-    -id: Int
+    -id: String
     -name: String
     -password: String
     -creation_date: String
@@ -26,8 +26,7 @@ class Product{
 
 class Order{
     -number: Int
-    -creation_date: String
-    -items: Item []
+    -creation_date: String                                                                                                     
     -status: String
 }
 
@@ -44,7 +43,7 @@ class Administrator{
 
 User <|-- Customer_User
 User <|-- Administrator 
-Customer_User "1" --> "1..N" Order : orders
+Customer_User "1" *--> "1..N" Order : orders
 Item "1" --> "1" Product : product
 Order "1" *--> "0..N" Item : items 
 
