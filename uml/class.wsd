@@ -1,5 +1,51 @@
 @startuml design
-
 left to right direction
+
+class User {
+    id: int
+    name: str
+    password: str
+    creationDate: int
+}
+
+class Customer {
+    address: str
+    phoneNumber: int
+    creditCardInfo: int
+}
+
+class Administrator {
+    id: int
+    name: str
+    password: str
+    creationDate: int
+}
+
+class Product {
+    code: int
+    description: str
+    availability: boolean
+    price: double
+}
+
+class Order {
+    number: int
+    creationDate: int
+    items: Items []
+    status:
+}
+
+class Item {
+    sequentialNumber: int
+    quantity: int
+    price: double
+}
+
+User <|-- Customer
+User <|-- Administrator
+
+Order "1" *--> "1..N" Item: order
+
+Order "1..N" o--> "1" Customer: orders
 
 @enduml
