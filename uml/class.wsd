@@ -10,8 +10,11 @@ class User{
 }
 
 class Customer_User{
-    +place_order: String
-    +track_order: String
+    -address: String
+    -phone: Int
+    -credit_card_info: Int
+    +place_order(): String
+    +track_order(): String
 }
 
 class Product{
@@ -24,7 +27,7 @@ class Product{
 class Order{
     -number: Int
     -creation_date: String
-    -items: String
+    -items: Item []
     -status: String
 }
 
@@ -35,13 +38,14 @@ class Item{
 }
 
 class Administrator{
-    +change_order_status
-    +update_products_catalog
+    +change_order_status()
+    +update_products_catalog()
 }
 
-User --|> Customer_User
-User --|> Administrator 
-Customer_User "1"--"many" Order
-Product -- Item
-Order . Product 
+User <|-- Customer_User
+User <|-- Administrator 
+Customer_User "1" --> "1..N" Order : orders
+Item "1" --> "1" Product : product
+Order "1" *--> "0..N" Item : items 
+
 @enduml
