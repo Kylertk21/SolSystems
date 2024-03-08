@@ -1,5 +1,23 @@
-@startuml 
+@startuml design
 
 left to right direction
+
+:user:
+:customer_user:
+:user: <|-- :customer_user:
+:administrator:
+:user: <|-- :administrator:
+
+package sol_system {
+    :user: --> (authenticate)
+    :customer_user: --> (place orders)
+    :customer_user: --> (track orders)
+    :administrator: --> (change order status)
+    :administrator: --> (update products catalog)
+    (change order status) .. (order status) : updates
+    (place orders) .. (order status) : updates
+    (track orders) .. (order status) : views
+    (update products catalog) .. (products) : updates
+}
 
 @enduml

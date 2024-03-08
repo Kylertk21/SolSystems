@@ -1,51 +1,51 @@
 @startuml design
+
 left to right direction
 
-class User {
-    id: int
-    name: str
-    password: str
-    creationDate: int
+class User{
+    -id: Int
+    -name: String
+    -password: String
+    -creation_date: String
 }
 
-class Customer {
-    address: str
-    phoneNumber: int
-    creditCardInfo: int
+class Customer_User{
+    -address: String
+    -phone: Int
+    -credit_card_info: Int
+    +place_order(): String
+    +track_order(): String
 }
 
-class Administrator {
-    id: int
-    name: str
-    password: str
-    creationDate: int
+class Product{
+    -code: Int
+    -description: String
+    -availability: Boolean
+    -price: Int
 }
 
-class Product {
-    code: int
-    description: str
-    availability: boolean
-    price: double
+class Order{
+    -number: Int
+    -creation_date: String
+    -items: Item []
+    -status: String
 }
 
-class Order {
-    number: int
-    creationDate: int
-    items: Items []
-    status:
+class Item{
+    -sequential_number: Int
+    -quantity: Int
+    -paid_price: Double 
 }
 
-class Item {
-    sequentialNumber: int
-    quantity: int
-    price: double
+class Administrator{
+    +change_order_status()
+    +update_products_catalog()
 }
 
-User <|-- Customer
-User <|-- Administrator
-
-Order "1" *--> "1..N" Item: order
-
-Order "1..N" o--> "1" Customer: orders
+User <|-- Customer_User
+User <|-- Administrator 
+Customer_User "1" --> "1..N" Order : orders
+Item "1" --> "1" Product : product
+Order "1" *--> "0..N" Item : items 
 
 @enduml
