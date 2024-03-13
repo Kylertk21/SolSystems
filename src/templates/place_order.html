@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <h1>Place Order</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.product.label }}: {{ form.product }}
+        </div>
+        <div>
+            {{ form.quantity.label }}: {{ form.quantity }}
+        </div>
+        <div>
+            <button type="submit">Place Order</button>
+        </div>
+    </form>
+{% endblock %}
