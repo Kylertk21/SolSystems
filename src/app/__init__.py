@@ -6,54 +6,46 @@ Description: Project 1 - Sol Systems Web App
 '''
 
 from flask import Flask
-import os
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
 app = Flask("Sol Systems Web App")
 app.secret_key = 'secret'
-app.config['USER SIGN UP']= 'User Sign UP"'
-app.config['USER SIGNIN']= 'User Sign IN"'
+app.config['USER_SIGN_UP'] = 'User Sign Up'
+app.config['USER_SIGN_IN'] = 'User Sign In'
 
-#db init
-from flask_sqlalchemy import SQLAlchemy
+# Initialize Flask-SQLAlchemy
 db = SQLAlchemy()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 db.init_app(app)
 
-from app import models
-with app.app.context():
+
+# Initialize Flask-Login
+login_manager = LoginManager(app)
+
+# Import routes
+from . import routes
+
+# Import models
+from .models import User, Order, Product, Item
+
+# Create database tables
+with app.app_context():
     db.create_all()
 
-#login
-from flask_login import LoginManager
-login_manager = LoginManager()
-login_manager.init_app(app)
-
+# login
 from app.models import User
 
-#callback
+# callback
 @login_manager.user_loader
 def load_user(id):
     try:
-        return db.session.query(User).filter(User.id==id).one()
+        return db.session.query(User).filter(User.id == id).one()
     except:
         return None
-    
-from app import routes
-
-
-
-
-
-
-
-
-
-
-
 
 # hard code 
 user1 = User(id=1, name='John ', passwd=b'my_secure_password')
-order1 = Order(number=21, creation_date='2024-03-09', items='ProductA, ProductB', status='Pending')
+order1 = Order(number=21, creation_date='2024-03-09', item='ProductA, ProductB', status='Pending')
 product1 = Product(code=1, description='ProductA', availability=True, price=10)
 item1 = Item(sequential_number=1, quantity=2, paid_price=20.0)
-pass

@@ -1,34 +1,43 @@
-from app import db
+from . import db
+from flask_login import UserMixin
 
-class User(db.model, UserMixin):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
-    id = db.Column(db.int, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     name = db.Column(db.String)
-    creation_date = db.Column(db.String) #do we need this one ?
+    creation_date = db.Column(db.String)
     passwd = db.Column(db.LargeBinary)
-    # customer and admin can just be objects of this class we just need to figure a way how to difrental betwwen the two
 
 class Admin(User):
-    status = db.Column(db.choices)
-    submit = db.Column(db.String)
+    id = db.Column(db.String, db.ForeignKey('users.id'), primary_key=True)
+    order = db.Column(db.String(50), nullable=False)
+
+    def get_orders(): #retrieve list of orders
+        form = OrderForm()
+        return form.order.choices
+
+class Customer(User):
+    id = db.Column(db.String, db.ForeignKey('users.id'), primary_key=True)
+    address = db.Column(db.String)
+    phone = db.Column(db.Integer)
+    credit_card_info = db.Column(db.Integer)
     
-class Order():
+class Order(db.Model):
     __tablename__ = 'orders'
-    number = db.Column(db.int, primary_key=True)
+    number = db.Column(db.Integer, primary_key=True)
     creation_date = db.Column(db.String)
-    item = db.Column(db.String) #do we need this one ?
+    item = db.Column(db.String)
     status = db.Column(db.String)
 
-class Product():
+class Product(db.Model):
     __tablename__ = 'products'
-    code = db.Column(db.int, primary_key=True)
+    code = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String)
-    availability = db.Colum(db.models.BinaryField(_("False")))
-    price = db.Column(db.int, primary_key=True)
+    availability = db.Column(db.Boolean, default=False)
+    price = db.Column(db.Integer, primary_key=True)
 
-    
-class Item():
+class Item(db.Model):
     __tablename__ = 'items'
-    sequential_number = db.Column(db.int, primary_key=True)
-    quantity = db.Column(db.int, primary_key=True)
+    sequential_number = db.Column(db.Integer, primary_key=True)
+    quantity = db.Column(db.Integer, primary_key=True)
     paid_price = db.Column(db.LargeBinary)
