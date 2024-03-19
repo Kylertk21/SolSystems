@@ -16,8 +16,8 @@ app.config['USER SIGNIN']= 'User Sign IN"'
 #db init
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://app.db'
-db.init(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+db.init_app(app)
 
 from app import models
 with app.app.context():
