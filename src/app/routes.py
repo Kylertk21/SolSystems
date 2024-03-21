@@ -100,26 +100,26 @@ def signup():
 
 @app.route('/products', methods=['GET', 'POST'])
 @login_required
-def place_order():
+def products():
     form = OrderForm()
     if form.validate_on_submit():
+        
         #process into DB
-        order_number = form.number.data
-        creation_date = form.creation_date.data
-        status = form.status.data
-        items = form.items.data
+        order = Order(
+            number = form.number.data,
+            creation_date = form.creation_date.data,
+            status = form.status.data,
+            select = form.select.data
+        )
+        
+        #store and commit
+        db.session.add(orders)
+        db.session.commit()
 
-        #Debug test print of form data
-        print(f"Order Number: {order_number}")
-        print(f"Creation Date: {creation_date}")
-        print(f"Status: {status}")
-        for item in items:
-            print(f"Item: {item}")
-
-        return redirect(url_for('place_order'))
+        return redirect(url_for('order_placed'))
     return render_template('products.html', form=form)
 
-@app.route('/place_order') 
+@app.route('/order_placed') 
 def order_placed():
     return "Order Placed Successfully"
 

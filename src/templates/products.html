@@ -7,13 +7,19 @@
 </head>
 <body>
     <h1>Place Order</h1>
-    <form action="" method="POST" novalidate>
+    <form action="{{ url_for('products') }}" method="POST" novalidate>
         {{ form.hidden_tag() }}
         <div>
-            {{ form.product.label }} {{ form.product }}
+            {{ form.number.label }} {{ form.number }}
         </div>
         <div>
-            {{ form.quantity.label }} {{ form.quantity }}
+            {{ form.creation_date.label }} {{ form.creation_date }}
+        </div>
+        <div>
+            {{ form.select.label }} {{ form.select}}
+        </div>
+        <div>
+            {{ form.status.label }} {{ form.status}}
         </div>
         <div>
             {{ form.submit }}
