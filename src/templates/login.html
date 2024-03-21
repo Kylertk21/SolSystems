@@ -1,13 +1,9 @@
 {% extends 'base.html' %}
-
-{% block title %}Login{% endblock %}
-
-{% block content %}
-    <h2>Login</h2>
-    <form action="/login" method="POST">
-        <!-- Include login form fields here -->
-        <input type="text" name="username" placeholder="Username">
-        <input type="password" name="password" placeholder="Password">
-        <button type="submit">Login</button>
-    </form>
+{% block main %}
+        <form action="" method="POST" novalidate>
+            {{ form.hidden_tag() }}
+            <p>{{ form.id.label }} <br> {{ form.id(size=15) }}</p>
+            <p>{{ form.passwd.label }} <br> {{ form.passwd(size=30) }}</p>
+            <p>{{ form.submit() }}</p>
+        </form>
 {% endblock %}

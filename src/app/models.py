@@ -3,7 +3,7 @@ from flask_login import UserMixin
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
-    id = db.Column(db.String, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     creation_date = db.Column(db.String)
     passwd = db.Column(db.LargeBinary)
@@ -17,10 +17,10 @@ class Admin(User):
         return form.order.choices
 
 class Customer(User):
-    id = db.Column(db.String, db.ForeignKey('users.id'), primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     address = db.Column(db.String)
-    phone = db.Column(db.Integer)
-    credit_card_info = db.Column(db.Integer)
+    phone = db.Column(db.String)
+    credit_card_info = db.Column(db.String)
     
 class Order(db.Model):
     __tablename__ = 'orders'
