@@ -5,6 +5,7 @@ from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
 import bcrypt
 from .forms import OrderForm, ProductForm
+from sqlalchemy.dialects.postgresql import insert
 
 @app.route('/')
 @app.route('/index')
@@ -143,6 +144,7 @@ products = [
 ]
 
 # Insert products into the database within the application context
+'''
 with app.app_context():
     for product_data in products:
         product = Product(
@@ -152,16 +154,37 @@ with app.app_context():
             price=product_data['price']
         )
         db.session.add(product)
+'''
 
-    # Commit the changes to the database
+with app.app_context(): 
+    def insert_or_update_product(product):
+        stmt = insert(Product).values(
+            code=product['code'],
+            description=product['description'],
+            availability=product['availability'],
+            price=product['price']
+        )
+        on_conflict_stmt = stmt.on_conflict_do_update(
+            index_elements=['code'],
+            set_={
+                'description': stmt.excluded.description,
+                'availability': stmt.excluded.availability,
+                'price': stmt.excluded.price
+            }
+        )
+        db.session.execute(on_conflict_stmt)
+
+    for product_data in products:
+        insert_or_update_product(product_data)
+
     db.session.commit()
 
-# Now you can define your /products route
 @app.route('/products', methods=['GET'])
 @login_required
 def products():
-    products = Product.query.all()  # Fetch all products from the database
+    products = Product.query.all() 
     return render_template('products.html', products=products)
+
 
 
 #================================================================#

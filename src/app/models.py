@@ -36,6 +36,7 @@ class Product(db.Model):
     availability = db.Column(db.Boolean, default=False)
     price = db.Column(db.Float)
 
+
 class Item(db.Model):
     __tablename__ = 'items'
     sequential_number = db.Column(db.Integer, primary_key=True)
