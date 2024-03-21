@@ -32,8 +32,8 @@ class OrderForm(FlaskForm):
     number = IntegerField('Number', validators=[DataRequired()])
     creation_date = StringField('Creation Date', validators=[DataRequired()])
     status = StringField('Status', validators=[DataRequired()])
-    items = FieldList(FormField(Item))
-    select = SelectField('Order', choices=[('order1', 'Order 1'), ('order2', 'Order 2'), ('order3', 'Order 3'), ('order4', 'Order 4')], validators=[DataRequired()])
+    #items = FieldList(FormField(Item))
+    #select = SelectField('Order', choices=[('order1', 'Order 1'), ('order2', 'Order 2'), ('order3', 'Order 3'), ('order4', 'Order 4')], validators=[DataRequired()])
     #quantity = StringField('Quantity', validators=[DataRequired()])
     submit = SubmitField('Place Order')
 

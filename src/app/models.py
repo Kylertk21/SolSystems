@@ -13,7 +13,7 @@ class Admin(User):
     order = db.Column(db.String(50), nullable=False)
 
     def get_orders(): #retrieve list of orders
-        form = OrderForm()
+        form = Order()
         return form.order.choices
 
 class Customer(User):
@@ -34,7 +34,7 @@ class Product(db.Model):
     code = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String)
     availability = db.Column(db.Boolean, default=False)
-    price = db.Column(db.Integer, primary_key=True)
+    price = db.Column(db.Float)
 
 class Item(db.Model):
     __tablename__ = 'items'

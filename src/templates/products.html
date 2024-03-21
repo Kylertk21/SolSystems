@@ -1,29 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Place Order</title>
-</head>
-<body>
-    <h1>Place Order</h1>
-    <form action="{{ url_for('products') }}" method="POST" novalidate>
-        {{ form.hidden_tag() }}
-        <div>
-            {{ form.number.label }} {{ form.number }}
-        </div>
-        <div>
-            {{ form.creation_date.label }} {{ form.creation_date }}
-        </div>
-        <div>
-            {{ form.select.label }} {{ form.select}}
-        </div>
-        <div>
-            {{ form.status.label }} {{ form.status}}
-        </div>
-        <div>
-            {{ form.submit }}
-        </div>
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Products{% endblock %}
+{% block main %}
+    <h1>Product List</h1>
+    <ul>
+        {% for product in products %}
+            <li>{{ product.description }} - Price: ${{ product.price }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
