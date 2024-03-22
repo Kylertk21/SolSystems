@@ -3,7 +3,7 @@ from wtforms import FormField, BooleanField, DecimalField, FieldList, IntegerFie
 from wtforms.validators import DataRequired
 
 class SignUpForm(FlaskForm):
-    id = IntegerField('Id', validators=[DataRequired()])
+    id = StringField('Id', validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired()])
     creation_date = StringField('Creation Date', validators=[DataRequired()])
     passwd = PasswordField('Password', validators=[DataRequired()])

@@ -3,18 +3,20 @@ from flask_login import UserMixin
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     name = db.Column(db.String)
     creation_date = db.Column(db.String)
     passwd = db.Column(db.LargeBinary)
+    role = db.Column(db.Boolean, default=False)
 
-class Admin(User):
+
+'''class Admin(User):
     id = db.Column(db.String, db.ForeignKey('users.id'), primary_key=True)
     order = db.Column(db.String(50), nullable=False)
 
     def get_orders(): #retrieve list of orders
         form = Order()
-        return form.order.choices
+        return form.order.choices'''
 
 class Customer(User):
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)

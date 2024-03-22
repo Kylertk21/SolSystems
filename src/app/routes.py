@@ -7,6 +7,11 @@ import bcrypt
 from .forms import OrderForm, ProductForm
 from sqlalchemy.dialects.postgresql import insert
 
+ADMIN_IDS = ['tmota']
+
+def admin():
+    return current_user.is_admin in ADMIN_IDS if current_user.is_authenticated else False 
+
 @app.route('/')
 @app.route('/index')
 @app.route('/index.html')
@@ -31,7 +36,7 @@ def login():
                     print("Password matched")
                     login_user(user)
                     print("Redirecting to products...")
-                    return redirect(url_for('place_order'))  # Redirect to products page
+                    return redirect(url_for('products'))  # Redirect to products page
                 else:
                     print("Password mismatch")
             else:
@@ -51,6 +56,15 @@ def signout():
 
     return redirect(url_for('index'))
 
+@app.route('/admin', methods=['GET', 'POST'])
+@login_required
+def admin_login():
+    if not admin():
+        return "Admin Access Only"
+    
+    return render_template('admin.html')
+
+
 #================================================================#
 
 #==========================SIGNUP================================#
@@ -62,13 +76,16 @@ def signup():
         print("Form submitted successfully")  # Print a message when the form is submitted
         if form.passwd.data == form.passwd_confirm.data:
             hashed = bcrypt.hashpw(form.passwd.data.encode('utf-8'), bcrypt.gensalt())
+            is_admin = form.id.data in ADMIN_IDS
 
             # Create User
             user = User(
                 id=form.id.data,
                 name=form.name.data, 
                 passwd=hashed,
-                creation_date=form.creation_date.data
+                creation_date=form.creation_date.data,
+                role=is_admin
+
             )
 
             # Store in DB

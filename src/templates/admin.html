@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Place Order</title>
+    <title>Admin</title>
 </head>
 <body>
-    <h1>Place Order</h1>
-    <form action="{{ url_for('place_order') }}" method="POST" novalidate>
+    <h1>Admin</h1>
+    <form action="{{ url_for('admin') }}" method="POST" novalidate>
         {{ form.hidden_tag() }}
         <div>
             {{ form.number.label }} {{ form.number }}
