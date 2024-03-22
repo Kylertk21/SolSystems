@@ -50,11 +50,11 @@ Estimate a schedule for this project by completing the table below.
 
 |Phase|Task|Start|End|Duration|Deliverable|
 |---|---|---|---|---|---|
-|Modeling|Requirements Analysis|mm/dd/23|mm/dd/23|99 days|Use Case Diagram|
-|Modeling|Data Model|mm/dd/23|mm/dd/23|99 days|Class Diagram|
-|Construction|Coding|mm/dd/23|mm/dd/23|99 days|Code|
-|Construction|Testing|mm/dd/23|mm/dd/23|99 days|Test Report|
-|Deployment|Delivery|mm/dd/23|mm/dd/23|99 days|Final Commit/Push|
+|Modeling|Requirements Analysis|03/05/24|03/06/24| 1 day |Use Case Diagram| #Kyler
+|Modeling|Data Model|03/05/24|03/07/24| 2 days |Class Diagram| #Kyler
+|Construction|Coding|03/08/24|03/13/24| ~1 week |Code|
+|Construction|Testing|03/13/24|03/22/24| 1.5 week  |Test Report| #Josh
+|Deployment|Delivery|03/05/24|03/22/24| 2 Weeks |Final Commit/Push|
 
 ## Team Roles
 
@@ -63,6 +63,11 @@ Assign roles for each member of the team by completing the table below. Member c
 |Name|Role(s)|
 |--|--|
 |name|manager,developer,tester,documenter|
+|Kyler| Manager |
+|Josh| Tester |
+|Munira| Developer |
+|Sho| Documentor |
+|Quach| Developer |
 
 # Modeling Phase
 
