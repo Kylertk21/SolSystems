@@ -69,6 +69,9 @@ def admin_dashboard():
 def signup():
     form = SignUpForm()
     if form.validate_on_submit():
+        existing_user = User.query.filter_by(id=form.id.data).first()
+        if existing_user:
+            return redirect(url_for('login'))
         if form.passwd.data == form.passwd_confirm.data:
             hashed = bcrypt.hashpw(form.passwd.data.encode('utf-8'), bcrypt.gensalt())
             is_admin = form.id.data in ADMIN_IDS
