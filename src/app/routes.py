@@ -18,7 +18,7 @@ def index():
 def users_signin():
     form = SignInForm()
     if form.validate_on_submit(): 
-        return redirect(url_for('activities'))
+        return redirect(url_for('orders'))
     else:
         return render_template('users_signin.html', form=form)
 
@@ -35,9 +35,8 @@ def users_signout():
     logout_user
     return redirect(url_for('index'))
 
-@app.route('/products')
-def products():
-    products = [
+
+products = [
         { 
             'code': 101, 
             'description': '6x8 monocrystalline cell panel, 240W', 
@@ -57,10 +56,7 @@ def products():
             'price': 450.00
         }
     ]
-    order = {
-        'products': products
-    }
-    return render_template('products.html', products=products)
+
 
 @app.route('/place_order', methods=['GET', 'POST'])
 @login_required
