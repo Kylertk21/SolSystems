@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <h1>User Dashboard</h1>
+    <div>
+        <a href="{{ url_for('place_order') }}" class="btn btn-primary">Place Order</a>
+        <a href="{{ url_for('orders') }}" class="btn btn-info">View Orders</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Sign Out</a>
+    </div>
+{% endblock %}
