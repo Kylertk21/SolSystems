@@ -5,7 +5,8 @@ from app.forms import SignUpForm, LoginForm
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
 import bcrypt
-from .forms import OrderForm
+from .forms import OrderForm, ProductForm
+from sqlalchemy.dialects.postgresql import insert
 
 @app.route('/')
 @app.route('/index')
@@ -31,7 +32,7 @@ def login():
                     print("Password matched")
                     login_user(user)
                     print("Redirecting to products...")
-                    return redirect(url_for('products'))  # Redirect to products page
+                    return redirect(url_for('place_order'))  # Redirect to products page
                 else:
                     print("Password mismatch")
             else:
@@ -39,16 +40,6 @@ def login():
 
         except Exception as e:
             print("Error occurred during login:", e)
-
-
-
-    '''if user and bcrypt.checkpw(form.passwd.data.encode('utf-8'), user.passwd): #check for matching PW
-            print("Login successful!")  # Debug message
-            login_user(user)
-            print("Redirecting to place_order...")  # Debug message
-            return redirect(url_for('place_order'))
-        else:
-            print("Login failed!")  # Debug message'''
 
    
 
@@ -103,11 +94,12 @@ def signup():
 
 #================================================================#
 
-#==========================PRODUCTS==============================#
 
-@app.route('/products', methods=['GET', 'POST'])
+#==========================Place Order==============================#
+
+@app.route('/place_order', methods=['GET', 'POST'])
 @login_required
-def products():
+def place_order():
     form = OrderForm()
     if form.validate_on_submit():
         
@@ -116,7 +108,7 @@ def products():
             number = form.number.data,
             creation_date = form.creation_date.data,
             status = form.status.data,
-            select = form.select.data
+            #select = form.select.data
         )
         
         #store and commit
@@ -124,12 +116,81 @@ def products():
         db.session.commit()
 
         return redirect(url_for('order_placed'))
-    return render_template('products.html', form=form)
+    return render_template('place_order.html', form=form)
 
 @app.route('/order_placed') 
 def order_placed():
     return "Order Placed Successfully"
 
+
+
+
+#================================================================#
+
+#==========================Products==============================#
+
+products = [
+    {
+        'code':101,
+        'description': '6x8 monocrystalline cell panel, 240W',
+        'availability': True,
+        'price': 150.00
+    },
+    {
+        'code':202,
+        'description': '6x10 monocrystalline cell panel, 310W',
+        'availability': True,
+        'price': 300.00
+    },
+    {
+        'code':303,
+        'description': '6x12 monocrystalline cell panel, 400W',
+        'availability': True,
+        'price': 450.00
+    }
+]
+
+# Insert products into the database within the application context
+'''
+with app.app_context():
+    for product_data in products:
+        product = Product(
+            code=product_data['code'],
+            description=product_data['description'],
+            availability=product_data['availability'],
+            price=product_data['price']
+        )
+        db.session.add(product)
+'''
+
+with app.app_context(): 
+    def insert_or_update_product(product):
+        stmt = insert(Product).values(
+            code=product['code'],
+            description=product['description'],
+            availability=product['availability'],
+            price=product['price']
+        )
+        on_conflict_stmt = stmt.on_conflict_do_update(
+            index_elements=['code'],
+            set_={
+                'description': stmt.excluded.description,
+                'availability': stmt.excluded.availability,
+                'price': stmt.excluded.price
+            }
+        )
+        db.session.execute(on_conflict_stmt)
+
+    for product_data in products:
+        insert_or_update_product(product_data)
+
+    db.session.commit()
+
+@app.route('/products', methods=['GET'])
+@login_required
+def products():
+    products = Product.query.all() 
+    return render_template('products.html', products=products)
 
 
 

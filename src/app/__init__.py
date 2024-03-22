@@ -33,9 +33,6 @@ from .models import User, Order, Product, Item
 with app.app_context():
     db.create_all()
 
-# login
-from app.models import User
-
 # callback
 @login_manager.user_loader
 def load_user(id):
