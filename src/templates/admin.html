@@ -7,19 +7,9 @@
 </head>
 <body>
     <h1>Admin</h1>
-    <form action="{{ url_for('admin') }}" method="POST" novalidate>
+    <form action="{{ url_for('admin_dashboard') }}" method="POST" novalidate>
         {{ form.hidden_tag() }}
         <div>
-            {{ form.number.label }} {{ form.number }}
-        </div>
-        <div>
-            {{ form.creation_date.label }} {{ form.creation_date }}
-        </div>
-        <div>
-            {{ form.status.label }} {{ form.status}}
-        </div>
-        <div>
-            {{ form.submit }}
         </div>
     </form>
 </body>

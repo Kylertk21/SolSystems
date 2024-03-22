@@ -19,7 +19,7 @@ class User(db.Model, UserMixin):
         return form.order.choices'''
 
 class Customer(User):
-    id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    id = db.Column(db.String, db.ForeignKey('users.id'), primary_key=True)
     address = db.Column(db.String)
     phone = db.Column(db.String)
     credit_card_info = db.Column(db.String)
