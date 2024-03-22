@@ -1,4 +1,3 @@
-import logging
 from app import app, db
 from app.models import User, Order, Product, Item
 from app.forms import SignUpForm, LoginForm, AdminForm
@@ -49,7 +48,20 @@ def signout():
 
 #================================================================#
 
-#==========================SIGNUP================================#
+#==========================ADMIN DASHBOARD=========================#
+
+@app.route('/admin', methods=['GET', 'POST'])
+@login_required
+def admin_dashboard():
+    if admin():
+        # Pass an empty form to the template
+        form = AdminForm()  # Replace SomeForm with the appropriate form class
+        return render_template('admin.html', form=form)
+    else:
+        return "Admin Access Only"
+
+
+#================================================================#
 
 #==========================SIGNUP================================#
 
@@ -57,11 +69,6 @@ def signout():
 def signup():
     form = SignUpForm()
     if form.validate_on_submit():
-        logging.debug("Form submitted successfully")  # Print a message when the form is submitted
-        existing_user = User.query.filter_by(id=form.id.data).first()
-        if existing_user:
-            logging.debug("User with ID %s already exists", form.id.data)
-            return redirect(url_for('login'))  # Redirect to login page if user already exists
         if form.passwd.data == form.passwd_confirm.data:
             hashed = bcrypt.hashpw(form.passwd.data.encode('utf-8'), bcrypt.gensalt())
             is_admin = form.id.data in ADMIN_IDS
@@ -78,13 +85,13 @@ def signup():
             # Store in DB
             db.session.add(user)
             db.session.commit()
-            logging.debug("User added to the database")  # Print a message when the user is added to the database
+            print("User added to the database")
             return redirect(url_for('login'))
         else:
-            logging.debug("Password confirmation does not match")  # Print a message if password confirmation does not match
+            print("Password confirmation does not match")
     else:
-        logging.debug("Form validation failed")  # Print a message if form validation fails
-        logging.debug(form.errors)
+        print("Form validation failed")
+        print(form.errors)
 
     return render_template('signup.html', form=form)
 
