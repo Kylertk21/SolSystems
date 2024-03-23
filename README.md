@@ -122,7 +122,19 @@ At this point you are NOT expected to write automated tests.  Instead, you are a
 
 |Functionality Tested|Date|Time|Result|
 |--|--|--|--|
-|Sign Up|99/99/23|99:99|passed|
+|Sign Up|03/19/24|1 Day|passed|
+|Login|03/19/24|1 Day|passed|
+|Product form page|03/20/24|1 day|passed|
+|Place order|03/20/24|2 days|started|
+|Order Form page|03/20/24|1 day|passed|
+|Sign Up|03/20/24|~2 days|failed(fix error)|
+|Sign Up error|03/20/24|half day|passed|
+|Admin dashboard|03/21/24|2 days|passed|
+|Place order|03/21/22|2 days|passed|
+|Customer Page|03/21/24|2 days|started(needs work)|
+|Customer Page|03/22/24|2 days|passed|
+|Admin dashboard|03/22/24|2 days|passed|
+|Ready to submit|03/22/24|1 day|END|
 
 # Deployment Phase
 
