@@ -107,23 +107,49 @@ def signup():
 @app.route('/place_order', methods=['GET', 'POST'])
 @login_required
 def place_order():
-    products = [
-    {'code': 101, 'description': '6x8 monocrystalline cell panel, 240W', 'available': True, 'price': 150.00},
-    {'code': 202, 'description': '6x10 monocrystalline cell panel, 310W', 'available': True, 'price': 300.00},
-    {'code': 303, 'description': '6x12 monocrystalline cell panel, 400W', 'available': True, 'price': 450.00}
-    ]
+    # Create an instance of the OrderForm
     form = OrderForm()
+
+    # Fetch available products from the database or use the provided list
+    products = [
+        {'code': 101, 'description': '6x8 monocrystalline cell panel, 240W', 'price': 150.00},
+        {'code': 202, 'description': '6x10 monocrystalline cell panel, 310W', 'price': 300.00},
+        {'code': 303, 'description': '6x12 monocrystalline cell panel, 400W', 'price': 450.00}
+    ]
+
+    # Populate the products field of the form with the available products
+    form.products.entries = [
+        ProductForm(code=product['code'], description=product['description'], price=product['price']) 
+        for product in products
+    ]
+
     if form.validate_on_submit():
+        # Process the form data and create the order
         order = Order(
             number=form.number.data,
             creation_date=form.creation_date.data,
             status=form.status.data,
             user_id=current_user.id
         )
+
+        # Add items to the order based on the form data
+        for product_form in form.products.entries:
+            # Create an Item object and add it to the order
+            item = Product(
+                code=product_form.code.data,
+                description=product_form.description.data,
+                price=product_form.price.data
+            )
+            order.products.append(item)
+
+        # Save the order to the database
         db.session.add(order)
         db.session.commit()
+
+        # Redirect to the order placed confirmation page
         return redirect(url_for('order_placed'))
-    return render_template('products.html', form=form)
+
+    return render_template('place_order.html', form=form)
 
 @app.route('/order_placed') 
 def order_placed():
@@ -132,7 +158,6 @@ def order_placed():
 #================================================================#
 
 #==========================Products==============================#
-
 @app.route('/products', methods=['GET'])
 @login_required
 def products():

@@ -15,7 +15,6 @@ class LoginForm(FlaskForm):
     passwd = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Confirm')
 
-
 class ProductForm(FlaskForm):
     code = IntegerField('Code', validators=[DataRequired()])
     description = StringField('Description')

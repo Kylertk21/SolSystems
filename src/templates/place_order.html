@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Place Order{% endblock %}
+
+{% block main %}
+  <h1>Place Order</h1>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div>
+      {{ form.number.label }}: {{ form.number }}
+    </div>
+    <div>
+      {{ form.creation_date.label }}: {{ form.creation_date }}
+    </div>
+    <div>
+      {{ form.status.label }}: {{ form.status }}
+    </div>
+    <hr>
+    <h2>Select Products</h2>
+    <table>
+      <tr>
+        <th>Product Code</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Quantity</th>
+      </tr>
+      {% for product_form in form.products %}
+      <tr>
+        <td><input type="text" name="{{ product_form.code.name }}" value="{{ product_form.code.data }}" readonly></td>
+        <td><input type="text" name="{{ product_form.description.name }}" value="{{ product_form.description.data }}" readonly></td>
+        <td><input type="text" name="{{ product_form.price.name }}" value="{{ product_form.price.data }}" readonly></td>
+        <td><input type="number" name="quantity_{{ product_form.code.id }}"></td>
+      </tr>
+      {% endfor %}
+    </table>
+    <hr>
+    <div>
+      {{ form.submit }}
+    </div>
+  </form>
+{% endblock %}
