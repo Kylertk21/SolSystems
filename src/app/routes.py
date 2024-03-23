@@ -128,6 +128,23 @@ def place_order():
         {'code': 303, 'description': '6x12 monocrystalline cell panel, 400W', 'price': 450.00}
     ]
 
+    for product_data in products:
+        existing_product = Product.query.filter_by(code=product_data['code']).first()
+        if existing_product:
+            # Product already exists, handle update or skip
+            pass
+        else:
+            # Insert the new product
+            new_product = Product(
+                code=product_data['code'],
+                description=product_data['description'],
+                price=product_data['price']
+            )
+            db.session.add(new_product)
+
+    # Commit changes to the database
+    db.session.commit()
+
     if form.validate_on_submit():
         order = Order(
             number=form.number.data,
@@ -144,11 +161,12 @@ def place_order():
         return redirect(url_for('order_placed'))
 
     # If form is not submitted or validation fails, render the form
-    return render_template('place_order.html', form=form)
+    return render_template('place_order.html', form=form, products=products)
 
 @app.route('/order_placed') 
 def order_placed():
     return "Order Placed Successfully"
+
 
 #================================================================#
 

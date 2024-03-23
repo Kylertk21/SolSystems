@@ -23,12 +23,12 @@
         <th>Price</th>
         <th>Quantity</th>
       </tr>
-      {% for product_form in form.products %}
+      {% for product in products %}
       <tr>
-        <td>{{ product_form.code.label }}</td>
-        <td>{{ product_form.description.label }}</td>
-        <td>{{ product_form.price.label }}</td>
-        <td><input type="number" name="quantity_{{ product_form.code.data }}"></td>
+        <td>{{ product.code }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ product.price }}</td>
+        <td><input type="number" name="quantity_{{ product.code }}"></td>
       </tr>
       {% endfor %}
     </table>
