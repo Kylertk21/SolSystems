@@ -3,16 +3,13 @@
 
 {% block main %}
   <h1>Place Order</h1>
-  <form method="POST">
+  <form method="POST" action="{{ url_for('place_order') }}">
     {{ form.hidden_tag() }}
     <div>
       {{ form.number.label }}: {{ form.number }}
     </div>
     <div>
       {{ form.creation_date.label }}: {{ form.creation_date }}
-    </div>
-    <div>
-      {{ form.status.label }}: {{ form.status }}
     </div>
     <hr>
     <h2>Select Products</h2>

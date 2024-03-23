@@ -8,10 +8,8 @@ Description: Project 1 - Sol Systems Web App
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from flask_wtf.csrf import CSRFProtect
 
 app = Flask("Sol Systems Web App")
-csrf = CSRFProtect(app)
 app.secret_key = 'secret'
 app.config['USER_SIGN_UP'] = 'User Sign Up'
 app.config['USER_SIGN_IN'] = 'User Sign In'

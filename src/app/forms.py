@@ -31,8 +31,7 @@ class Item(FlaskForm):
 class OrderForm(FlaskForm):
     number = IntegerField('Number', validators=[DataRequired()])
     creation_date = StringField('Creation Date', validators=[DataRequired()])
-    status = StringField('Status', validators=[DataRequired()])
-    products = FieldList(FormField(ProductForm), min_entries=1)
+    status = SelectField('Order Status', choices=[('pending', 'Pending'), ('processing', 'Processing'), ('shipped', 'Shipped')], validators=[DataRequired()])
     submit = SubmitField('Place Order')
 
     '''def copy(self):

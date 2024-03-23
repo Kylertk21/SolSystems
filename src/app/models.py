@@ -28,8 +28,9 @@ class Order(db.Model):
     __tablename__ = 'orders'
     number = db.Column(db.Integer, primary_key=True)
     creation_date = db.Column(db.String)
-    item = db.Column(db.String)
     status = db.Column(db.String)
+    items = db.relationship('Item', backref='order', lazy=True)
+
 
 class Product(db.Model):
     __tablename__ = 'products'
@@ -42,5 +43,7 @@ class Product(db.Model):
 class Item(db.Model):
     __tablename__ = 'items'
     sequential_number = db.Column(db.Integer, primary_key=True)
-    quantity = db.Column(db.Integer, primary_key=True)
-    paid_price = db.Column(db.LargeBinary)
+    quantity = db.Column(db.Integer)
+    paid_price = db.Column(db.Float) 
+    order_number = db.Column(db.Integer, db.ForeignKey('orders.number'), nullable=False)
+

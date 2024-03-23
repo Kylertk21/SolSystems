@@ -8,19 +8,19 @@
 <body>
     <h1>Admin</h1>
     <form action="{{ url_for('admin_dashboard') }}" method="POST" novalidate>
-<form method="POST">
-    {{ order_status_form.order_id.label }}: {{ order_status_form.order_id }}
-    {{ order_status_form.status.label }}: {{ order_status_form.status }}
-    {{ order_status_form.submit }}
-</form>
-
-<form method="POST">
-    {{ product_update_form.code.label }}: {{ product_update_form.code }}
-    {{ product_update_form.description.label }}: {{ product_update_form.description }}
-    {{ product_update_form.availability.label }}: {{ product_update_form.availability }}
-    {{ product_update_form.price.label }}: {{ product_update_form.price }}
-    {{ product_update_form.submit }}
-</form>
+        <!-- Order Status Form -->
+        {{ order_status_form.hidden_tag() }}
+        {{ order_status_form.order_id.label }}: {{ order_status_form.order_id }}
+        {{ order_status_form.status.label }}: {{ order_status_form.status }}
+        {{ order_status_form.submit }}
+        
+        <!-- Product Update Form -->
+        {{ product_update_form.hidden_tag() }}
+        {{ product_update_form.code.label }}: {{ product_update_form.code }}
+        {{ product_update_form.description.label }}: {{ product_update_form.description }}
+        {{ product_update_form.availability.label }}: {{ product_update_form.availability }}
+        {{ product_update_form.price.label }}: {{ product_update_form.price }}
+        {{ product_update_form.submit }}
+    </form>
 </body>
 </html>
-

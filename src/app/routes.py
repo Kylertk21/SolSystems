@@ -58,24 +58,41 @@ def admin_dashboard():
     product_update_form = ProductUpdateForm()
 
     if order_status_form.validate_on_submit():
-        # Logic to change order status
         order_id = order_status_form.order_id.data
         new_status = order_status_form.status.data
-        # Update order status in the database
-        # Redirect or render a template
+
+        try:
+            order = Order.query.filter_by(number=order_id).first()
+            if order:
+                order.status = new_status
+                db.session.commit()
+                flash('Order status updated successfully!', 'success')
+            else:
+                flash('Order not found!', 'error')
+        except Exception as e:
+            flash(f"Error occurred while updating order status: {str(e)}", 'error')
 
     if product_update_form.validate_on_submit():
-        # Logic to update product catalog
         code = product_update_form.code.data
         description = product_update_form.description.data
         availability = product_update_form.availability.data
         price = product_update_form.price.data
-        # Update product in the database
-        # Redirect or render a template
+
+        product = Product.query.filter_by(code=code).first()
+        if product:
+            product.description = description
+            product.availability = availability
+            product.price = price
+            db.session.commit()
+            flash('Product updated successfully!', 'success')
+        else:
+            flash('Product not found!', 'error')
 
     return render_template('admin.html', order_status_form=order_status_form, product_update_form=product_update_form)
 
+
 #================================================================#
+
 
 #==========================SIGNUP================================#
 
@@ -91,7 +108,7 @@ def signup():
             hashed = bcrypt.hashpw(form.passwd.data.encode('utf-8'), bcrypt.gensalt())
             is_admin = form.id.data in ADMIN_IDS
 
-            # Create User
+
             user = User(
                 id=form.id.data,
                 name=form.name.data, 
@@ -100,7 +117,7 @@ def signup():
                 role=is_admin
             )
 
-            # Store in DB
+       
             db.session.add(user)
             db.session.commit()
             flash('Signed up successfully!', 'success')
@@ -116,69 +133,54 @@ def signup():
 #================================================================#
 
 #==========================Place Order==============================#
-
 @app.route('/place_order', methods=['GET', 'POST'])
 @login_required
 def place_order():
     form = OrderForm()
 
+    # Initialize products
     products = [
         {'code': 101, 'description': '6x8 monocrystalline cell panel, 240W', 'price': 150.00},
         {'code': 202, 'description': '6x10 monocrystalline cell panel, 310W', 'price': 300.00},
         {'code': 303, 'description': '6x12 monocrystalline cell panel, 400W', 'price': 450.00}
     ]
 
-    for product_data in products:
-        existing_product = Product.query.filter_by(code=product_data['code']).first()
-        if existing_product:
-            # Product already exists, handle update or skip
-            pass
-        else:
-            # Insert the new product
-            new_product = Product(
-                code=product_data['code'],
-                description=product_data['description'],
-                price=product_data['price']
-            )
-            db.session.add(new_product)
-
-    # Commit changes to the database
-    db.session.commit()
-
     if form.validate_on_submit():
+        for product_data in products:
+            existing_product = Product.query.filter_by(code=product_data['code']).first()
+            if existing_product:
+                pass
+            else:
+                new_product = Product(
+                    code=product_data['code'],
+                    description=product_data['description'],
+                    price=product_data['price']
+                )
+                db.session.add(new_product)
+
+
+        existing_order = Order.query.filter_by(number=form.number.data).first()
+        if existing_order:
+            return redirect(url_for('place_order'))
+        
         order = Order(
             number=form.number.data,
             creation_date=form.creation_date.data,
             status=form.status.data,
-            user_id=current_user.id
         )
 
-        # Save the order to the database
         db.session.add(order)
         db.session.commit()
 
         flash('Order placed successfully!', 'success')
-        return redirect(url_for('order_placed'))
+        return redirect(url_for('place_order'))
 
-    # If form is not submitted or validation fails, render the form
+
     return render_template('place_order.html', form=form, products=products)
 
-@app.route('/order_placed') 
-def order_placed():
-    return "Order Placed Successfully"
-
 
 #================================================================#
 
-#==========================Products==============================#
-
-@app.route('/products', methods=['GET'])
-@login_required
-def products():
-    products = Product.query.all() 
-    return render_template('products.html', products=products)
-
-#================================================================#
 
 @app.route('/user_dashboard')
 @login_required
@@ -186,13 +188,13 @@ def user_dashboard():
     return render_template('user_dashboard.html')
 
 @app.route('/track_orders', methods=['GET'])
-@login_required  # Ensure the user is authenticated
+@login_required 
 def track_orders():
     try:
-        # Query the database for orders associated with the current user
-        orders = Order.query.filter_by(customer_id=current_user.id).all()
+       
+        orders = Order.query.filter_by(user_id=current_user.id).all()
 
-        # Prepare a list of order data to pass to the template
+     
         orders_data = []
         for order in orders:
             orders_data.append({
@@ -201,7 +203,7 @@ def track_orders():
                 'status': order.status,
             })
 
-        # Render the track orders template and pass the orders data
+     
         return render_template('track_orders.html', orders=orders_data)
     except Exception as e:
         flash("Error occurred while tracking orders: " + str(e), 'error')
