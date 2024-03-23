@@ -1,11 +1,9 @@
 from app import app, db
 from app.models import User, Order, Product, Item
-from app.forms import SignUpForm, LoginForm, AdminForm, OrderStatusForm, ProductUpdateForm
-from flask import render_template, redirect, url_for, request
+from app.forms import SignUpForm, LoginForm, AdminForm, OrderStatusForm, ProductUpdateForm, OrderForm, ProductForm
+from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_required, login_user, logout_user, current_user
 import bcrypt
-from .forms import OrderForm, ProductForm
-from sqlalchemy.dialects.postgresql import insert
 
 ADMIN_IDS = ['tmota']
 
@@ -33,11 +31,11 @@ def login():
                 if admin():
                     return redirect(url_for('admin_dashboard'))
                 else:
-                    return redirect(url_for('products'))
+                    return redirect(url_for('user_dashboard'))
             else:
-                print("User not found or password mismatch")
+                flash("User not found or password mismatch", 'error')
         except Exception as e:
-            print("Error occurred during login:", e)
+            flash("Error occurred during login: " + str(e), 'error')
 
     return render_template('login.html', form=form)
 
@@ -49,8 +47,6 @@ def signout():
 #================================================================#
 
 #==========================ADMIN DASHBOARD=========================#
-
-
 
 @app.route('/admin', methods=['GET', 'POST'])
 @login_required
@@ -79,8 +75,6 @@ def admin_dashboard():
 
     return render_template('admin.html', order_status_form=order_status_form, product_update_form=product_update_form)
 
-
-
 #================================================================#
 
 #==========================SIGNUP================================#
@@ -91,6 +85,7 @@ def signup():
     if form.validate_on_submit():
         existing_user = User.query.filter_by(id=form.id.data).first()
         if existing_user:
+            flash("User already exists. Please login.", 'error')
             return redirect(url_for('login'))
         if form.passwd.data == form.passwd_confirm.data:
             hashed = bcrypt.hashpw(form.passwd.data.encode('utf-8'), bcrypt.gensalt())
@@ -108,13 +103,13 @@ def signup():
             # Store in DB
             db.session.add(user)
             db.session.commit()
-            print("User added to the database")
+            flash('Signed up successfully!', 'success')
             return redirect(url_for('login'))
         else:
-            print("Password confirmation does not match")
+            flash("Password confirmation does not match", 'error')
     else:
-        print("Form validation failed")
-        print(form.errors)
+        flash("Form validation failed", 'error')
+        flash(form.errors, 'error')
 
     return render_template('signup.html', form=form)
 
@@ -126,15 +121,29 @@ def signup():
 @login_required
 def place_order():
     form = OrderForm()
+
+    products = [
+        {'code': 101, 'description': '6x8 monocrystalline cell panel, 240W', 'price': 150.00},
+        {'code': 202, 'description': '6x10 monocrystalline cell panel, 310W', 'price': 300.00},
+        {'code': 303, 'description': '6x12 monocrystalline cell panel, 400W', 'price': 450.00}
+    ]
+
     if form.validate_on_submit():
         order = Order(
             number=form.number.data,
             creation_date=form.creation_date.data,
             status=form.status.data,
+            user_id=current_user.id
         )
+
+        # Save the order to the database
         db.session.add(order)
         db.session.commit()
+
+        flash('Order placed successfully!', 'success')
         return redirect(url_for('order_placed'))
+
+    # If form is not submitted or validation fails, render the form
     return render_template('place_order.html', form=form)
 
 @app.route('/order_placed') 
@@ -152,4 +161,31 @@ def products():
     return render_template('products.html', products=products)
 
 #================================================================#
+
+@app.route('/user_dashboard')
+@login_required
+def user_dashboard():
+    return render_template('user_dashboard.html')
+
+@app.route('/track_orders', methods=['GET'])
+@login_required  # Ensure the user is authenticated
+def track_orders():
+    try:
+        # Query the database for orders associated with the current user
+        orders = Order.query.filter_by(customer_id=current_user.id).all()
+
+        # Prepare a list of order data to pass to the template
+        orders_data = []
+        for order in orders:
+            orders_data.append({
+                'id': order.id,
+                'product_id': order.product_id,
+                'status': order.status,
+            })
+
+        # Render the track orders template and pass the orders data
+        return render_template('track_orders.html', orders=orders_data)
+    except Exception as e:
+        flash("Error occurred while tracking orders: " + str(e), 'error')
+        return redirect(url_for('user_dashboard'))
 

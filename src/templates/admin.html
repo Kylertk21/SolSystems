@@ -8,7 +8,6 @@
 <body>
     <h1>Admin</h1>
     <form action="{{ url_for('admin_dashboard') }}" method="POST" novalidate>
-
 <form method="POST">
     {{ order_status_form.order_id.label }}: {{ order_status_form.order_id }}
     {{ order_status_form.status.label }}: {{ order_status_form.status }}

@@ -15,7 +15,6 @@ class LoginForm(FlaskForm):
     passwd = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Confirm')
 
-
 class ProductForm(FlaskForm):
     code = IntegerField('Code', validators=[DataRequired()])
     description = StringField('Description')
@@ -28,14 +27,21 @@ class Item(FlaskForm):
     price_paid = DecimalField('Price Paid', validators=[DataRequired()])
     product = FormField(ProductForm)
     
+
 class OrderForm(FlaskForm):
     number = IntegerField('Number', validators=[DataRequired()])
     creation_date = StringField('Creation Date', validators=[DataRequired()])
     status = StringField('Status', validators=[DataRequired()])
-    #items = FieldList(FormField(Item))
-    #select = SelectField('Order', choices=[('order1', 'Order 1'), ('order2', 'Order 2'), ('order3', 'Order 3'), ('order4', 'Order 4')], validators=[DataRequired()])
-    #quantity = StringField('Quantity', validators=[DataRequired()])
+    products = FieldList(FormField(ProductForm), min_entries=1)
     submit = SubmitField('Place Order')
+
+    '''def copy(self):
+        copied_form = OrderForm()
+        for field_name, field in self._fields.items():
+            if field_name in self.data:
+                setattr(copied_form, field_name, self.data[field_name])
+        copied_form.errors.update(self.errors)
+        return copied_form'''
 
 class OrderStatusForm(FlaskForm):
     order_id = StringField('Order ID', validators=[DataRequired()])
@@ -50,9 +56,5 @@ class ProductUpdateForm(FlaskForm):
     submit = SubmitField('Update Product')
 
 class AdminForm(FlaskForm):
-    update_product_catalog = FormField(OrderForm)
-    change_order_status = FormField(OrderForm) 
-
-
-
-
+    update_product_catalog = FormField(ProductUpdateForm)
+    change_order_status = FormField(OrderStatusForm)
