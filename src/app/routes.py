@@ -1,6 +1,6 @@
 from app import app, db
 from app.models import User, Order, Product, Item
-from app.forms import SignUpForm, LoginForm, AdminForm
+from app.forms import SignUpForm, LoginForm, AdminForm, OrderStatusForm, ProductUpdateForm
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, login_user, logout_user, current_user
 import bcrypt
@@ -50,15 +50,35 @@ def signout():
 
 #==========================ADMIN DASHBOARD=========================#
 
+
+
 @app.route('/admin', methods=['GET', 'POST'])
 @login_required
 def admin_dashboard():
-    if admin():
-        # Pass an empty form to the template
-        form = AdminForm()  # Replace SomeForm with the appropriate form class
-        return render_template('admin.html', form=form)
-    else:
+    if not admin():
         return "Admin Access Only"
+    
+    order_status_form = OrderStatusForm()
+    product_update_form = ProductUpdateForm()
+
+    if order_status_form.validate_on_submit():
+        # Logic to change order status
+        order_id = order_status_form.order_id.data
+        new_status = order_status_form.status.data
+        # Update order status in the database
+        # Redirect or render a template
+
+    if product_update_form.validate_on_submit():
+        # Logic to update product catalog
+        code = product_update_form.code.data
+        description = product_update_form.description.data
+        availability = product_update_form.availability.data
+        price = product_update_form.price.data
+        # Update product in the database
+        # Redirect or render a template
+
+    return render_template('admin.html', order_status_form=order_status_form, product_update_form=product_update_form)
+
 
 
 #================================================================#

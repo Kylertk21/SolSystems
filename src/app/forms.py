@@ -37,14 +37,21 @@ class OrderForm(FlaskForm):
     #quantity = StringField('Quantity', validators=[DataRequired()])
     submit = SubmitField('Place Order')
 
-class OrderStatus(FlaskForm):
-    order_id = StringField('Order ID')
-    status = SelectField('Order Status', choices=[('pending', 'processing', 'shipped')])
+class OrderStatusForm(FlaskForm):
+    order_id = StringField('Order ID', validators=[DataRequired()])
+    status = SelectField('Order Status', choices=[('pending', 'Pending'), ('processing', 'Processing'), ('shipped', 'Shipped')], validators=[DataRequired()])
     submit = SubmitField('Change Order Status')
 
+class ProductUpdateForm(FlaskForm):
+    code = IntegerField('Code', validators=[DataRequired()])
+    description = StringField('Description')
+    availability = BooleanField('Availability')
+    price = StringField('Price', validators=[DataRequired()])
+    submit = SubmitField('Update Product')
+
 class AdminForm(FlaskForm):
-    update_product_catalog = FormField(OrderStatus)
-    change_order_status = FormField(OrderStatus) 
+    update_product_catalog = FormField(OrderForm)
+    change_order_status = FormField(OrderForm) 
 
 
 
