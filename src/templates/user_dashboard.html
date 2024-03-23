@@ -1,10 +1,27 @@
-{% extends "base.html" %}
-
-{% block main %}
-    <h1>User Dashboard</h1>
-    <div>
-        <a href="{{ url_for('place_order') }}" class="btn btn-primary">Place Order</a>
-        <a href="{{ url_for('orders') }}" class="btn btn-info">View Orders</a>
-        <a href="{{ url_for('logout') }}" class="btn btn-danger">Sign Out</a>
-    </div>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to Your Dashboard</h1>
+    
+    <!-- Place Order Button -->
+    <form method="get" action="{{ url_for('place_order') }}">
+        <button type="submit">Place Order</button>
+    </form>
+    
+    <!-- Track Orders Button -->
+    <form method="get" action="{{ url_for('track_orders') }}">
+        <button type="submit">Track Orders</button>
+    </form>
+    
+    <!-- Sign Out Button -->
+    <form method="post" action="{{ url_for('signout') }}">
+        <button type="submit">Sign Out</button>
+    </form>
+    
+</body>
+</html>

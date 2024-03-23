@@ -3,7 +3,7 @@ from wtforms import FormField, BooleanField, DecimalField, FieldList, IntegerFie
 from wtforms.validators import DataRequired
 
 class SignUpForm(FlaskForm):
-    id = IntegerField('Id', validators=[DataRequired()])
+    id = StringField('Id', validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired()])
     creation_date = StringField('Creation Date', validators=[DataRequired()])
     passwd = PasswordField('Password', validators=[DataRequired()])
@@ -32,9 +32,7 @@ class OrderForm(FlaskForm):
     number = IntegerField('Number', validators=[DataRequired()])
     creation_date = StringField('Creation Date', validators=[DataRequired()])
     status = StringField('Status', validators=[DataRequired()])
-    #items = FieldList(FormField(Item))
-    #select = SelectField('Order', choices=[('order1', 'Order 1'), ('order2', 'Order 2'), ('order3', 'Order 3'), ('order4', 'Order 4')], validators=[DataRequired()])
-    #quantity = StringField('Quantity', validators=[DataRequired()])
+    products = FieldList(FormField(ProductForm), min_entries=1)
     submit = SubmitField('Place Order')
 
 class OrderStatus(FlaskForm):
